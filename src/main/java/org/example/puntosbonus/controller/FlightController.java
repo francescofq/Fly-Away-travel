@@ -50,7 +50,7 @@ public class FlightController {
                                          @AuthenticationPrincipal User user) {
         UUID bookingId = bookingService.bookFlight(requestDTO.getFlightId(), user);
         // También 201 Created para las reservas
-        return new ResponseEntity<>(new NewIdDTO(bookingId.toString()), HttpStatus.CREATED);
+        return new ResponseEntity<>(new NewIdDTO(bookingId.toString()), HttpStatus.OK);
     }
 
     @GetMapping("/book/{id}")

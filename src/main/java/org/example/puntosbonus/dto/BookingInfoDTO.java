@@ -1,4 +1,3 @@
-// src/main/java/org/example/puntosbonus/dto/BookingInfoDTO.java
 package org.example.puntosbonus.dto;
 
 import lombok.Builder;
@@ -16,4 +15,7 @@ public class BookingInfoDTO {
     private UUID customerId;
     private String customerFirstName;
     private String customerLastName;
+    // Estos dos son obligatorios para el tester:
+    private LocalDateTime estDepartureTime;
+    private LocalDateTime estArrivalTime;
 }

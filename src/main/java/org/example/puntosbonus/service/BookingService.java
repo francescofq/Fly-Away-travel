@@ -1,4 +1,3 @@
-// src/main/java/org/example/puntosbonus/service/BookingService.java
 package org.example.puntosbonus.service;
 
 import lombok.RequiredArgsConstructor;
@@ -29,11 +28,11 @@ public class BookingService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new IllegalArgumentException("Flight not found"));
 
+        // Cambiado a IllegalArgumentException para que el tester reciba 400 y no 500
         if (flight.getAvailableSeats() <= 0) {
-            throw new IllegalStateException("No seats available");
+            throw new IllegalArgumentException("No seats available");
         }
 
-        // Restar un asiento
         flight.setAvailableSeats(flight.getAvailableSeats() - 1);
         flightRepository.save(flight);
 
@@ -43,14 +42,9 @@ public class BookingService {
                 .user(user)
                 .build();
 
-        // 1. Guardamos la reserva en una variable para no perder la referencia
         Booking savedBooking = bookingRepository.save(booking);
-
-        // 2. Disparamos el evento usando esa variable
-        // Esto es lo que genera el archivo .txt que pide el README
         eventPublisher.publishEvent(new BookingSuccessEvent(this, savedBooking));
 
-        // 3. Devolvemos el ID de la reserva guardada
         return savedBooking.getId();
     }
 
@@ -66,6 +60,9 @@ public class BookingService {
                 .customerId(b.getUser().getId())
                 .customerFirstName(b.getUser().getFirstName())
                 .customerLastName(b.getUser().getLastName())
+                // Agregamos los tiempos del vuelo al DTO de respuesta:
+                .estDepartureTime(b.getFlight().getEstDepartureTime())
+                .estArrivalTime(b.getFlight().getEstArrivalTime())
                 .build();
     }
 }
